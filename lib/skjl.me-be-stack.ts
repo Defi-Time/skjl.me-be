@@ -29,6 +29,15 @@ export class SkjlMeBeStack extends cdk.Stack {
             }
         })
 
+        const skjlGetHandler = new lambda.Function(this, 'skjlGetHandler', {
+            runtime: lambda.Runtime.NODEJS_14_X,
+            code: lambda.Code.fromAsset('lambda'),
+            handler: 'skjlGetCalendar.handler',
+            environment: {
+                tableName: dynamoDbSkjlPubs.tableName,
+            }
+        })
+
         const api = new apigw.RestApi(this, 'wkjlApis', {
             restApiName: "skjl.me APIs",
             description: "APIs for the SKJL.me application."
@@ -40,9 +49,14 @@ export class SkjlMeBeStack extends cdk.Stack {
 
         api.root.addMethod("POST", postCalendarIntegration, {
             operationName: "Add Calendar",
-            // requestParameters: {
-            //     "method.request.querystring.id" : true
-            // }
+        })
+
+        const getCalendarIntegration = new apigw.LambdaIntegration(skjlGetHandler, {
+            requestTemplates: { "application/json": '{"statusCode": "200"}'},
+        })
+
+        api.root.addMethod("GET", getCalendarIntegration, {
+            operationName: "Get Calendars",
         })
 
 
