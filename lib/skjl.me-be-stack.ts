@@ -1,5 +1,7 @@
 import * as cdk from '@aws-cdk/core';
 import * as ddb from '@aws-cdk/aws-dynamodb';
+import * as lambda from '@aws-cdk/aws-lambda';
+import * as apigw from '@aws-cdk/aws-apigateway';
 
 export class SkjlMeBeStack extends cdk.Stack {
     constructor(scope: cdk.App, id: string, props?: cdk.StackProps) {
@@ -18,6 +20,33 @@ export class SkjlMeBeStack extends cdk.Stack {
             partitionKey: {name: 'calendarId', type: ddb.AttributeType.STRING}
         })
 
+        const skjlPostHandler = new lambda.Function(this, 'skjlPostHandler', {
+            runtime: lambda.Runtime.NODEJS_14_X,
+            code: lambda.Code.fromAsset('lambda'),
+            handler: 'skjlAddCalendar.handler',
+            environment: {
+                tableName: dynamoDbSkjlPubs.tableName,
+            }
+        })
+
+        const api = new apigw.RestApi(this, 'wkjlApis', {
+            restApiName: "skjl.me APIs",
+            description: "APIs for the SKJL.me application."
+        })
+
+        const postCalendarIntegration = new apigw.LambdaIntegration(skjlPostHandler, {
+            requestTemplates: { "application/json": '{"statusCode": "200"}'},
+        })
+
+        api.root.addMethod("POST", postCalendarIntegration, {
+            operationName: "Add Calendar",
+            // requestParameters: {
+            //     "method.request.querystring.id" : true
+            // }
+        })
+
+
+        dynamoDbSkjlPubs.grantReadWriteData(skjlPostHandler);
 
     }
 }
