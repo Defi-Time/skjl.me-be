@@ -17,3 +17,6 @@ See [this useful workshop](https://cdkworkshop.com/20-typescript.html) on workin
  * `cdk deploy`      deploy this stack to your default AWS account/region
  * `cdk diff`        compare deployed stack with current state
  * `cdk synth`       emits the synthesized CloudFormation template
+
+ * `cdk --version`   To get the current version of the CDK
+ * `aws sts get-caller-identity --profile fff` to get the account number of the currently selected profile
