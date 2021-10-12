@@ -1,0 +1,14 @@
+{
+  "name": "SKJL.me",
+  "version": "1.0.0",
+  "description": "This is the Lambda directory for the SKJL.me backend project",
+  "main": "skjlAddCalendar.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "mim. Armand",
+  "dependencies": {
+    "uuid": "^8.3.2"
+  }
+}

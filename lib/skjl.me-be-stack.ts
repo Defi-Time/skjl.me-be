@@ -11,7 +11,7 @@ export class SkjlMeBeStack extends cdk.Stack {
             partitionKey: {name: 'pubKey', type: ddb.AttributeType.STRING},
             sortKey: {name: 'calendarId', type: ddb.AttributeType.STRING},
             tableName: 'SkjlMePubs',
-            removalPolicy: cdk.RemovalPolicy.RETAIN,
+            // removalPolicy: cdk.RemovalPolicy.DESTROY, // todo: we need to RETAIN this, but AWS CDK does not support it yet so we need a workaround for that!
             billingMode: ddb.BillingMode.PAY_PER_REQUEST,
         })
 
@@ -61,6 +61,7 @@ export class SkjlMeBeStack extends cdk.Stack {
 
 
         dynamoDbSkjlPubs.grantReadWriteData(skjlPostHandler);
+        dynamoDbSkjlPubs.grantReadWriteData(skjlGetHandler);
 
     }
 }
