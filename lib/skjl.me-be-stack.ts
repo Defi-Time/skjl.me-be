@@ -15,10 +15,10 @@ export class SkjlMeBeStack extends cdk.Stack {
             billingMode: ddb.BillingMode.PAY_PER_REQUEST,
         })
 
-        dynamoDbSkjlPubs.addGlobalSecondaryIndex({
-            indexName: 'calendarIndex',
-            partitionKey: {name: 'calendarId', type: ddb.AttributeType.STRING}
-        })
+        // dynamoDbSkjlPubs.addGlobalSecondaryIndex({
+        //     indexName: 'calendarIndex',
+        //     partitionKey: {name: 'calendarId', type: ddb.AttributeType.STRING}
+        // })
 
         const skjlPostHandler = new lambda.Function(this, 'skjlPostHandler', {
             runtime: lambda.Runtime.NODEJS_14_X,
